@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>Dynamic Forms Demo</title>
+    <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:regular,bold' rel='stylesheet'
+          type='text/css'/>
+    <link rel="stylesheet" href="style.css" type="text/css" media="screen" title="Stylesheet"/>
+</head>
+<body>
+
+<div id="hd">
+    <div id="logo">
+        <img src="http://www.crisp.se/wp-content/themes/crisp/images/crisp-logo-smaller.png"/>
+
+        <h1>Dynamic Forms Example</h1>
+    </div>
+</div>
+<div id="bd">
+    <p>
+        Welcome to the Dynamic Form Demo. Below you can specify the form for our domain object.
+    </p>
+
+    <p>
+        Our domain object looks as follows:
+    <pre>
+        private class DomainObject {
+            String firstName = "";
+            String lastName = "";
+            Integer bornYear = 1900;
+        }
+    </pre>
+    </p>
+    <p>Syntax: &lt;field&gt;:&lt;field type&gt;:&lt;property name&gt;;</p>
+    <p>Example: Year of birth:integer:bornYear; </p>
+    <form action="" wicket:id="form">
+        <textarea wicket:id="spec" cols="80"></textarea>
+        <input type="submit"/>
+    </form>
+</div>
+<div id="ft">
+</div>
+</body>
+</html>
