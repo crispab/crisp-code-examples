@@ -1,14 +1,21 @@
 package se.crisp.examples;
 
+import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -27,9 +34,18 @@ public class ShowForm extends WebPage {
     static final String LABEL = "label";
     static final String FIELD = "inputField";
     static final String FIELDS = "fields";
+    static final String FEEDBACK = "feedback";
+    static final String INTEGER_TYPE = "integer";
+    static final String SUBMIT_BUTTON = "ajax-button";
+    private final FeedbackPanel feedback;
 
     public ShowForm(String specification, Object object) {
-        add(new ShowFormForm(FORM, specification, object));
+        feedback = new FeedbackPanel(FEEDBACK);
+        feedback.setOutputMarkupId(true);
+        add(feedback);
+        ShowFormForm form = new ShowFormForm(FORM, specification, object);
+        add(form);
+        //AjaxFormValidatingBehavior.addToAllFormComponents(form, "onkeyup", Duration.ONE_SECOND);
     }
 
     private class FieldSpec implements Serializable {
@@ -52,6 +68,7 @@ public class ShowForm extends WebPage {
             super(id);
             setDefaultModel(new CompoundPropertyModel<Object>(object));
             addFieldsAccordingToSpecification(specification, object);
+            add(createAjaxSubmitButton());
         }
 
         @Override
@@ -68,9 +85,23 @@ public class ShowForm extends WebPage {
                 protected void populateItem(ListItem<FieldSpec> item) {
                     FieldSpec fieldSpec = item.getModelObject();
                     item.add(new Label(LABEL, fieldSpec.label));
-                    item.add(new TextField<String>(FIELD, new PropertyModel<String>(object, fieldSpec.property)));
+                    item.add(createInputField(fieldSpec, object));
                 }
             });
+        }
+
+        private FormComponent createInputField(FieldSpec fieldSpec, Object object) {
+            FormComponent field;
+            if (fieldSpec.type.equalsIgnoreCase(INTEGER_TYPE)) {
+                field = new TextField<Integer>(FIELD, new PropertyModel<Integer>(object, fieldSpec.property));
+            } else {
+                field = new TextField<String>(FIELD, new PropertyModel<String>(object, fieldSpec.property));
+            }
+            field.setOutputMarkupId(true);
+            field.setRequired(true);
+            field.setLabel(Model.of(fieldSpec.label));
+            field.add(new CssClassAppender());
+            return field;
         }
 
         private List<FieldSpec> parseSpecification(String specification) {
@@ -84,5 +115,23 @@ public class ShowForm extends WebPage {
             return result;
         }
 
+        private AjaxButton createAjaxSubmitButton() {
+            return new AjaxButton(SUBMIT_BUTTON, this) {
+                @Override
+                protected void onError(final AjaxRequestTarget target, Form<?> form) {
+                    form.visitChildren(new IVisitor<Component, Object>() {
+                        @Override
+                        public void component(Component object, IVisit<Object> visit) {
+                            if (object instanceof FormComponent) {
+                                FormComponent fc = (FormComponent) object;
+                                target.add(fc);
+                            }
+                        }
+                    });
+                    target.add(feedback);
+                }
+
+            };
+        }
     }
 }

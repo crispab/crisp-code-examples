@@ -20,11 +20,13 @@ public class ShowFormTest {
     static final String VALUE = "42";
     private WicketTester tester;
     private static final String SOME_PROPERTY = "someProperty";
+    private static final String SOME_INT_PROPERTY = "intProperty";
     private static final String SOME_LABEL = "some label";
     private static final String LINE_END = ShowForm.LINE_END;
     private static final String SAMPLE_SPEC = SOME_LABEL + ":string:" + SOME_PROPERTY + LINE_END;
-    private static final String ONE_INTEGER_SPEC = SOME_LABEL + ":integer:" + SOME_PROPERTY + LINE_END;
+    private static final String ONE_INTEGER_SPEC = SOME_LABEL + ":integer:" + SOME_INT_PROPERTY + LINE_END;
     private DomainObjectForTesting object;
+    private static final String NOT_A_NUMBER = "not a number";
 
     @Before
     public void setUp()
@@ -53,7 +55,7 @@ public class ShowFormTest {
         formTester.setValue(ShowForm.FIELDS + ":0:" + ShowForm.FIELD, VALUE);
         formTester.submit();
 
-        assertEquals(VALUE, object.someProperty);
+        assertEquals(VALUE, String.valueOf(object.intProperty));
     }
 
     @Test
@@ -65,7 +67,17 @@ public class ShowFormTest {
         tester.assertRenderedPage(FormSubmissionResult.class);
     }
 
+    @Test
+    public void on_submit_validate_integer_field() {
+        tester.startPage(new ShowForm(ONE_INTEGER_SPEC, object));
+        FormTester formTester = tester.newFormTester(ShowForm.FORM);
+        formTester.setValue(ShowForm.FIELDS + ":0:" + ShowForm.FIELD, NOT_A_NUMBER);
+        formTester.submit();
+        tester.assertRenderedPage(ShowForm.class);
+    }
+    
     private class DomainObjectForTesting {
         public String someProperty = "";
+        public Integer intProperty = new Integer(-1);
     }
 }

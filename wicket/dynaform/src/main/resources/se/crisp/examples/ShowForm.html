@@ -5,6 +5,7 @@
     <title>Dynamic Forms Demo</title>
     <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:regular,bold' rel='stylesheet' type='text/css' />
     <link rel="stylesheet" href="style.css" type="text/css" media="screen" title="Stylesheet" />
+    <link rel="stylesheet" href="showForm.css" type="text/css" media="screen" title="Stylesheet" />
 </head>
 <body>
 <div id="hd">
@@ -15,6 +16,7 @@
     </div>
 </div>
 <div id="bd">
+    <div wicket:id="feedback"></div>
     <form wicket:id="form" style="border: solid 1px">
         <table>
             <tbody>
@@ -24,7 +26,7 @@
             </tr>
             </tbody>
         </table>
-        <input type="submit"/>
+        <input wicket:id="ajax-button" type="submit"/>
     </form>
 </div>
 <div id="ft">
