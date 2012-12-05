@@ -14,7 +14,7 @@ import org.junit.Test;
 public class DynamicFormDemoTest {
 
     private WicketTester tester;
-    private static final String SAMPLE_SPEC = "some label:string:someProperty";
+    private static final String SAMPLE_SPEC = "some label:string:lastName";
 
     @Before
     public void setUp()
