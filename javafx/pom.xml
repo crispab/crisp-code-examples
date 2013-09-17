@@ -9,5 +9,6 @@
         <module>analogClock</module>
         <module>tdd-tetrahedron</module>
         <module>usingRobot</module>
+        <module>web-view-test</module>
     </modules>
 </project>

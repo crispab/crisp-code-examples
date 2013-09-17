@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<example>
+    <persons xmlns:wicket="http://wicket.sourceforge.net/">
+        <person wicket:id="persons">
+            <firstName wicket:id="firstName"/>
+            <lastName wicket:id="lastName"/>
+            <address wicket:id="address">
+                <street wicket:id="street"/>
+            </address>
+        </person>
+    </persons>
+    <explaination><![CDATA[
+  You can use any XML based markup with Wicket. You want
+  to do VoiceML, WML, whateverML? Please join us on our
+  questee of creating a great framework!
+]]>
+    </explaination>
+</example>
