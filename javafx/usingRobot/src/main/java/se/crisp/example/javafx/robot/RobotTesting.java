@@ -1,7 +1,7 @@
 package se.crisp.example.javafx.robot;
 
 import javafx.animation.KeyFrame;
-import javafx.animation.TimelineBuilder;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -24,7 +24,7 @@ public class RobotTesting extends Application {
     @Override
     public void start(Stage primaryStage) {
         final Button btn = new Button();
-        btn.setText("Say 'Hello World'");
+        btn.setText("Click to make this button be clicked by a robot!");
         btn.setOnAction(buttonActionHandler(btn));
 
         StackPane root = new StackPane();
@@ -32,7 +32,7 @@ public class RobotTesting extends Application {
 
         Scene scene = new Scene(root, 300, 250);
 
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("Using Robot");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -43,48 +43,34 @@ public class RobotTesting extends Application {
             public void handle(ActionEvent event) {
                 System.out.println("Hello World!");
                 final Scene scene = button.getScene();
-                final Point2D windowCoord = new Point2D(scene.getWindow().getX(), scene.getWindow().getY());
-                final Point2D sceneCoord = new Point2D(scene.getX(), scene.getY());
-                final Point2D nodeCoord = button.localToScene(0.0, 0.0);
-                final double clickX = Math.round(windowCoord.getX() + sceneCoord.getX() + nodeCoord.getX());
-                final double clickY = Math.round(windowCoord.getY() + sceneCoord.getY() + nodeCoord.getY());
+                final Point2D windowCoordinates = new Point2D(scene.getWindow().getX(), scene.getWindow().getY());
+                final Point2D sceneCoordinates = new Point2D(scene.getX(), scene.getY());
+                final Point2D nodeCoordinates = button.localToScene(0.0, 0.0);
+                final double clickX = Math.round(windowCoordinates.getX() + sceneCoordinates.getX() + nodeCoordinates.getX());
+                final double clickY = Math.round(windowCoordinates.getY() + sceneCoordinates.getY() + nodeCoordinates.getY());
                 clickMeAgainLater(clickX, clickY);
             }
 
             private void clickMeAgainLater(double x, double y) {
-                TimelineBuilder
-                        .create()
-                        .keyFrames(
-                        new KeyFrame(Duration.seconds(5), clickIt(x, y)))
-                        .build()
-                        .play();
+                Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), clickIt(x, y)));
+                timeline.play();
             }
 
             private EventHandler<ActionEvent> clickIt(final double x, final double y) {
-                return new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent t) {
-                        try {
-                            Robot robot = new Robot();
-                            robot.mouseMove(new Double(x).intValue(), new Double(y).intValue());
-                            robot.mousePress(InputEvent.BUTTON1_MASK);
-                            robot.mouseRelease(InputEvent.BUTTON1_MASK);
-                        } catch (AWTException ex) {
-                            logger.log(Level.SEVERE, "bad mouse", ex);
-                        }
+                return t -> {
+                    try {
+                        Robot robot = new Robot();
+                        robot.mouseMove(new Double(x).intValue(), new Double(y).intValue());
+                        robot.mousePress(InputEvent.BUTTON1_MASK);
+                        robot.mouseRelease(InputEvent.BUTTON1_MASK);
+                    } catch (AWTException ex) {
+                        logger.log(Level.SEVERE, "bad mouse", ex);
                     }
                 };
             }
         };
     }
 
-    /**
-     * The main() method is ignored in correctly deployed JavaFX application. main() serves only as fallback in case the
-     * application can not be launched through deployment artifacts, e.g., in IDEs with limited FX support. NetBeans
-     * ignores main().
-     *
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
         launch(args);
     }
