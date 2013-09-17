@@ -13,6 +13,7 @@ public class RestService extends WebApplication {
     public void init() {
         super.init();
         mountPage("/xml", XmlPage.class);
+        mountPage("/authorization", LinkedInSimulator.class);
         getMarkupSettings().setStripWicketTags(true);
     }
 }

@@ -27,7 +27,11 @@ public class WebBrowser1 extends Application {
     private WebView createWebView() {
         WebView webView = new WebView();
         WebEngine webEngine = webView.getEngine();
-        webEngine.load("http://crisp.se");
+        webEngine.load("http://localhost:8080/authorization?response_type=code" +
+                "&client_id=fake" +
+                "&scope=SCOPE" +
+                "&state=STATE" +
+                "&redirect_uri=http://artcomputer.se");
         return webView;
     }
 

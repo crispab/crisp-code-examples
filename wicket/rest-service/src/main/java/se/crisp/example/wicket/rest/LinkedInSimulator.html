@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+<head>
+    <title></title>
+</head>
+<body>
+<div style="background-color: black; color: whitesmoke">
+    <form wicket:id="form">
+        <p>Sign in to LinkedIn Simulator and allow access</p>
+        <label>
+            <input wicket:id="email" type="text" placeholder="Email"/>
+        </label>
+        <label>
+            <input wicket:id="password" type="password" placeholder="Password"/>
+        </label>
+
+        <p>
+            <small>Not a member? Join LinkedIn.</small>
+        </p>
+        <p>
+            <input type="submit" value="Allow access" style="background-color: blue; color: whitesmoke"/>
+            <input type="reset" value="Cancel"/>
+        </p>
+    </form>
+</div>
+</body>
+</html>
