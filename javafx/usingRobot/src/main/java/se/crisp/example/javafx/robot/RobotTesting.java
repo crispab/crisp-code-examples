@@ -1,10 +1,5 @@
-package se.crisp.javafx.example;
+package se.crisp.example.javafx.robot;
 
-import java.awt.AWTException;
-import java.awt.Robot;
-import java.awt.event.InputEvent;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.animation.KeyFrame;
 import javafx.animation.TimelineBuilder;
 import javafx.application.Application;
@@ -16,6 +11,11 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.awt.*;
+import java.awt.event.InputEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class RobotTesting extends Application {
 

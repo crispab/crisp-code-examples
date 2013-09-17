@@ -1,4 +1,4 @@
-package se.crisp.javafx.example;
+package se.crisp.example.javafx.analogClock;
 
 /*
  * Created with IntelliJ IDEA.
