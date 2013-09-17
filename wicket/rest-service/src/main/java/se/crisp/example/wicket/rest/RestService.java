@@ -14,6 +14,7 @@ public class RestService extends WebApplication {
         super.init();
         mountPage("/xml", XmlPage.class);
         mountPage("/authorization", LinkedInSimulator.class);
+        mountPage("/landing", LandingPage.class);
         getMarkupSettings().setStripWicketTags(true);
     }
 }

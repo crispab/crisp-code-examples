@@ -9,8 +9,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class LinkedInSimulator extends WebPage {
 
@@ -52,11 +54,19 @@ public class LinkedInSimulator extends WebPage {
 
         @Override
         protected void onSubmit() {
-            setResponsePage(new RedirectPage(parameterMap.get(REDIRECT_URI)));
+            setResponsePage(new RedirectPage(createResponseUrl()));
+        }
+
+        private String createResponseUrl() {
+            return parameterMap.get(REDIRECT_URI) + "?code=" + generateCode() + "&state=" + parameterMap.get(STATE);
+        }
+
+        private String generateCode() {
+            return UUID.randomUUID().toString();
         }
     }
 
-    private class LinkedInSimulatorData {
+    private class LinkedInSimulatorData implements Serializable {
         String email = "";
         String password = "";
     }
