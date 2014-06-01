@@ -9,10 +9,7 @@ package se.crisp.example.javafx.analogClock;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.animation.TimelineBuilder;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.util.Duration;
 
 import java.util.Calendar;
@@ -31,24 +28,14 @@ public class Clockwork {
     }
 
     private void startTicking() {
-        TimelineBuilder.create()
-                .cycleCount(Timeline.INDEFINITE)
-                .keyFrames(
-                        new KeyFrame(Duration.seconds(1), updateTime())
-                )
-                .build()
-                .play();
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            Calendar calendar = Calendar.getInstance();
+            hour.set(calendar.get(Calendar.HOUR));
+            minute.set(calendar.get(Calendar.MINUTE));
+            second.set(calendar.get(Calendar.SECOND));
+        }));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
     }
 
-    private EventHandler updateTime() {
-        return new EventHandler() {
-            @Override
-            public void handle(Event event) {
-                Calendar calendar = Calendar.getInstance();
-                hour.set(calendar.get(Calendar.HOUR));
-                minute.set(calendar.get(Calendar.MINUTE));
-                second.set(calendar.get(Calendar.SECOND));
-            }
-        };
-    }
 }
