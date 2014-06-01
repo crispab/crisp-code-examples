@@ -2,29 +2,21 @@ package se.crisp.example.javafx.analogClock;
 
 import javafx.application.Application;
 import javafx.event.EventHandler;
-import javafx.scene.*;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.RadialGradientBuilder;
+import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.*;
 import javafx.scene.transform.Rotate;
-import javafx.scene.transform.RotateBuilder;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-/*
- * Created with IntelliJ IDEA.
- * User: perty
- * Date: 2012-08-08
- * Time: 08:25
- */
-
-/**
- * The analog clock gets a clockwork.
- */
 public class AnalogClockWithClockwork extends Application {
 
     static final double unit = 100.0;
@@ -33,16 +25,15 @@ public class AnalogClockWithClockwork extends Application {
 
     @Override
     public void start(final Stage stage) throws Exception {
-        final Parent root = GroupBuilder.create()
-                .children(
-                        outerRim(),
-                        minuteHand(),
-                        hourHand(),
-                        secondsHand(),
-                        tickMarks(),
-                        centerPoint()
-                )
-                .build();
+        final Parent root = new Group(
+                outerRim(),
+                minuteHand(),
+                hourHand(),
+                secondsHand(),
+                tickMarks(),
+                centerPoint()
+        );
+
         setUpMouseForScaleAndMove(stage, root);
         Scene scene = makeATransparentScene(root);
         makeATransparentStage(stage, scene);
@@ -70,36 +61,29 @@ public class AnalogClockWithClockwork extends Application {
     private Node secondsHand() {
         Rotate rotate = rotationAroundCenter();
         rotate.angleProperty().bind(clockwork.second.multiply(360 / 60));
-        return LineBuilder.create()
-                .startX(unit)
-                .endX(unit)
-                .startY(unit * 1.1)
-                .endY(unit * 0.2)
-                .transforms(rotate)
-                .build();
+        Line line = new Line(unit, unit * 1.1, unit, unit * 0.2);
+        line.getTransforms().add(rotate);
+
+        return line;
     }
 
     private Rotate rotationAroundCenter() {
-        return RotateBuilder.create()
-                .pivotX(unit)
-                .pivotY(unit)
-                .build();
+        return new Rotate(0.0, unit, unit);
     }
 
 
     private Node hand(double stretchRelativeToRim, Color color, Rotate rotate) {
-        return PathBuilder.create()
-                .fill(color)
-                .stroke(Color.TRANSPARENT)
-                .elements(
-                        new MoveTo(unit, unit),
-                        new LineTo(unit * 0.9, unit * 0.9),
-                        new LineTo(unit, stretchRelativeToRim),
-                        new LineTo(unit * 1.1, unit * 0.9),
-                        new LineTo(unit, unit)
-                )
-                .transforms(rotate)
-                .build();
+        Path path = new Path(
+                new MoveTo(unit, unit),
+                new LineTo(unit * 0.9, unit * 0.9),
+                new LineTo(unit, stretchRelativeToRim),
+                new LineTo(unit * 1.1, unit * 0.9),
+                new LineTo(unit, unit)
+        );
+        path.setFill(color);
+        path.setStroke(Color.TRANSPARENT);
+        path.getTransforms().add(rotate);
+        return path;
     }
 
 
@@ -112,52 +96,29 @@ public class AnalogClockWithClockwork extends Application {
     }
 
     private Node tickMark(int n) {
-        return LineBuilder.create()
-                .startX(unit)
-                .endX(unit)
-                .startY(unit * 0.12)
-                .endY(unit * (n % 3 == 0 ? 0.3 : 0.2))
-                .transforms(
-                        RotateBuilder.create()
-                                .pivotX(unit)
-                                .pivotY(unit)
-                                .angle(360 / 12 * n)
-                                .build()
-                )
-                .strokeWidth(2)
-                .build();
+        double angle = 360 / 12 * n;
+        Rotate rotate = new Rotate(angle, unit, unit);
+        Line line = new Line(unit, unit * 0.12, unit, unit * (n % 3 == 0 ? 0.3 : 0.2));
+        line.getTransforms().add(rotate);
+        return line;
     }
 
     private Node centerPoint() {
-        return CircleBuilder.create()
-                .fill(Color.BLACK)
-                .radius(0.05 * unit)
-                .centerX(unit)
-                .centerY(unit)
-                .build();
+        double radius = 0.05 * unit;
+        return new Circle(unit, unit, radius, Color.BLACK);
     }
 
     private Node outerRim() {
-        return CircleBuilder.create()
-                .fill(
-                        RadialGradientBuilder.create()
-                                .stops(
-                                        new Stop(0.8, Color.WHITE),
-                                        new Stop(0.9, Color.BLACK),
-                                        new Stop(0.95, Color.WHITE),
-                                        new Stop(1.0, Color.BLACK)
-                                )
-                                .cycleMethod(CycleMethod.NO_CYCLE)
-                                .centerX(0.5)
-                                .centerY(0.5)
-                                .radius(0.5)
-                                .proportional(true)
-                                .build()
-                )
-                .radius(unit)
-                .centerX(unit)
-                .centerY(unit)
-                .build();
+        double centerX = 0.5;
+        double centerY = 0.5;
+        double radius = 0.5;
+        RadialGradient radialGradient = new RadialGradient(0.0, 0.0, centerX, centerY, radius, true, CycleMethod.NO_CYCLE,
+                new Stop(0.8, Color.WHITE),
+                new Stop(0.9, Color.BLACK),
+                new Stop(0.95, Color.WHITE),
+                new Stop(1.0, Color.BLACK)
+        );
+        return new Circle(unit, unit, unit, radialGradient);
     }
 
     private void setUpMouseForScaleAndMove(final Stage stage, final Parent root) {
@@ -166,39 +127,33 @@ public class AnalogClockWithClockwork extends Application {
     }
 
     private EventHandler<MouseEvent> moveWhenDragging(final Stage stage) {
-        return new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                stage.setX(mouseEvent.getScreenX() - stage.getWidth() / 2);
-                stage.setY(mouseEvent.getScreenY() - stage.getHeight() / 2);
-            }
+        return mouseEvent -> {
+            stage.setX(mouseEvent.getScreenX() - stage.getWidth() / 2);
+            stage.setY(mouseEvent.getScreenY() - stage.getHeight() / 2);
         };
     }
 
     private EventHandler<ScrollEvent> scaleWhenScrolling(final Stage stage, final Parent root) {
-        return new EventHandler<ScrollEvent>() {
-            @Override
-            public void handle(ScrollEvent scrollEvent) {
-                double scroll = scrollEvent.getDeltaY();
-                root.setScaleX(root.getScaleX() + scroll / 100);
-                root.setScaleY(root.getScaleY() + scroll / 100);
-                root.setTranslateX(root.getTranslateX() + scroll);
-                root.setTranslateY(root.getTranslateY() + scroll);
-                stage.sizeToScene();
-            }
+        return scrollEvent -> {
+            double scroll = scrollEvent.getDeltaY();
+            double scaleX = root.getScaleX() + scroll / 100;
+            root.setScaleX(scaleX);
+            double scaleY = root.getScaleY() + scroll / 100;
+            root.setScaleY(scaleY);
+            root.setTranslateX(root.getTranslateX() + scroll);
+            root.setTranslateY(root.getTranslateY() + scroll);
+            stage.sizeToScene();
         };
     }
 
     private Scene makeATransparentScene(Parent root) {
-        return SceneBuilder.create()
-                .root(root)
-                .fill(Color.TRANSPARENT)
-                .build();
+        return new Scene(root, Color.TRANSPARENT);
     }
 
     private void makeATransparentStage(Stage stage, Scene scene) {
         stage.setScene(scene);
         stage.initStyle(StageStyle.TRANSPARENT);
+        stage.setAlwaysOnTop(true);
         stage.show();
     }
 
