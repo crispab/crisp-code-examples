@@ -6,7 +6,10 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.EventHandler;
-import javafx.scene.*;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -31,16 +34,9 @@ public class DiceMeshViewer extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Node dice = createMeshDice();
-        dice.setTranslateX(unit);
-        dice.setTranslateY(unit);
-        dice.setTranslateZ(unit);
-        dice.getTransforms().addAll(rx, ry, rz);
+
         animate();
 
-        PointLight light = new PointLight(Color.WHEAT);
-        light.setTranslateX(unit);
-        light.setTranslateY(unit);
-        light.setTranslateZ(-unit);
         final Parent root = new Group(
                 dice
         );
@@ -54,7 +50,10 @@ public class DiceMeshViewer extends Application {
         TriangleMesh mesh = createMesh(unit, unit, unit);
         MeshView dice = new MeshView(mesh);
         dice.setMaterial(createMaterial());
-
+        dice.setTranslateX(unit);
+        dice.setTranslateY(unit);
+        dice.setTranslateZ(unit);
+        dice.getTransforms().addAll(rx, ry, rz);
         return dice;
     }
 
