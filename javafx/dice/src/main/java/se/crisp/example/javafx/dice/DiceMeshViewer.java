@@ -23,11 +23,10 @@ import java.net.URL;
 
 public class DiceMeshViewer extends Application {
     static final float unit = 100.0f;
-    static final String TEXTURE = "cbGn_pof-bm.png";
+    static final String TEXTURE = "dice.png";
     final Rotate rx = new Rotate(0, Rotate.X_AXIS);
     final Rotate ry = new Rotate(0, Rotate.Y_AXIS);
     final Rotate rz = new Rotate(0, Rotate.Z_AXIS);
-    private Scene scene;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -45,8 +44,6 @@ public class DiceMeshViewer extends Application {
         final Parent root = new Group(
                 dice
         );
-        root.prefHeight(unit);
-        root.prefWidth(unit );
 
         setUpMouseForScaleAndMove(stage, root);
         Scene scene = makeATransparentScene(root);
@@ -118,8 +115,7 @@ public class DiceMeshViewer extends Application {
     }
 
     private Scene makeATransparentScene(Parent root) {
-        scene = new Scene(root,Color.TRANSPARENT);
-        return scene;
+        return new Scene(root, unit * 2, unit * 2, Color.TRANSPARENT);
     }
 
     private void makeATransparentStage(Stage stage, Scene scene) {
