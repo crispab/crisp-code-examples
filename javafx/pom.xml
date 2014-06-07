@@ -8,6 +8,7 @@
     <modules>
         <module>analogClock</module>
         <module>dice</module>
+        <module>tdd-cube</module>
         <module>tdd-tetrahedron</module>
         <module>usingRobot</module>
         <module>web-view-test</module>
