@@ -1,12 +1,5 @@
 package se.crisp.example.javafx.analogClock;
 
-/*
- * Created with IntelliJ IDEA.
- * User: perty
- * Date: 2012-08-09
- * Time: 15:22
- */
-
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.SimpleIntegerProperty;

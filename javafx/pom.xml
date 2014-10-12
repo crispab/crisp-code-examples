@@ -11,6 +11,7 @@
         <module>tdd-cube</module>
         <module>tdd-tetrahedron</module>
         <module>usingRobot</module>
+        <module>util</module>
         <module>web-view-test</module>
     </modules>
 

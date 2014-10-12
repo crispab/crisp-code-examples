@@ -1,13 +1,8 @@
 package se.crisp.example.javafx.analogClock;
 
-import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.RadialGradient;
@@ -15,9 +10,9 @@ import javafx.scene.paint.Stop;
 import javafx.scene.shape.*;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import se.crisp.example.javafx.util.Gadget;
 
-public class AnalogClockWithClockwork extends Application {
+public class AnalogClockWithClockwork extends Gadget {
 
     static final double unit = 100.0;
 
@@ -34,9 +29,7 @@ public class AnalogClockWithClockwork extends Application {
                 centerPoint()
         );
 
-        setUpMouseForScaleAndMove(stage, root);
-        Scene scene = makeATransparentScene(root);
-        makeATransparentStage(stage, scene);
+        gadgetStart(stage, root, unit * 3, unit * 3);
     }
 
     private Node hourHand() {
@@ -119,42 +112,6 @@ public class AnalogClockWithClockwork extends Application {
                 new Stop(1.0, Color.BLACK)
         );
         return new Circle(unit, unit, unit, radialGradient);
-    }
-
-    private void setUpMouseForScaleAndMove(final Stage stage, final Parent root) {
-        root.onMouseDraggedProperty().set(moveWhenDragging(stage));
-        root.onScrollProperty().set(scaleWhenScrolling(stage, root));
-    }
-
-    private EventHandler<MouseEvent> moveWhenDragging(final Stage stage) {
-        return mouseEvent -> {
-            stage.setX(mouseEvent.getScreenX() - stage.getWidth() / 2);
-            stage.setY(mouseEvent.getScreenY() - stage.getHeight() / 2);
-        };
-    }
-
-    private EventHandler<ScrollEvent> scaleWhenScrolling(final Stage stage, final Parent root) {
-        return scrollEvent -> {
-            double scroll = scrollEvent.getDeltaY();
-            double scaleX = root.getScaleX() + scroll / 100;
-            root.setScaleX(scaleX);
-            double scaleY = root.getScaleY() + scroll / 100;
-            root.setScaleY(scaleY);
-            root.setTranslateX(root.getTranslateX() + scroll);
-            root.setTranslateY(root.getTranslateY() + scroll);
-            stage.sizeToScene();
-        };
-    }
-
-    private Scene makeATransparentScene(Parent root) {
-        return new Scene(root, Color.TRANSPARENT);
-    }
-
-    private void makeATransparentStage(Stage stage, Scene scene) {
-        stage.setScene(scene);
-        stage.initStyle(StageStyle.TRANSPARENT);
-        stage.setAlwaysOnTop(true);
-        stage.show();
     }
 
     public static void main(String[] args) {
