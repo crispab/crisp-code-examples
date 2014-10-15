@@ -21,9 +21,14 @@ public class TddCubeView extends MeshView {
     private static final Rotate rz = new Rotate(0, Rotate.Z_AXIS);
     private static final double sideAnglesX[] = {0, 0, 0, 0, 90, 270};
     private static final double sideAnglesY[] = {270, 0, 90, 180, 0, 0};
+    private static final int sideOrder[] = {1, 5, 3, 1, 2, 4};
+
+    private static final int spinTime = 3;
+    private static final int timeOutTime = spinTime + 30;
+    private static final int resetTime = timeOutTime + 3;
 
     private Timeline sideAnimations[] = new Timeline[6];
-    private int sideIndex = -1;
+    private int sideIndex = 0;
 
     public TddCubeView(float unit) throws FileNotFoundException {
         super(createMesh(unit, unit, unit));
@@ -37,7 +42,7 @@ public class TddCubeView extends MeshView {
 
         onMouseClickedProperty().setValue(this::nextSide);
     }
-    
+
     private static TriangleMesh createMesh(float w, float h, float d) {
         return new MeshCube(w, h, d);
     }
@@ -56,28 +61,36 @@ public class TddCubeView extends MeshView {
     }
 
     private void setUpSideAnimations() {
-        setUpSideAnimation(0, 5);
-        setUpSideAnimation(1, 3);
-        setUpSideAnimation(2, 1);
-        setUpSideAnimation(3, 2);
-        setUpSideAnimation(4, 4);
-        setUpSideAnimation(5, 1);
+        for (int side = 0; side < sideOrder.length; side++) {
+            setUpSideAnimation(side, sideOrder[side]);
+        }
     }
 
     private void setUpSideAnimation(int animation, int toSide) {
         sideAnimations[animation] = new Timeline();
-        sideAnimations[animation].getKeyFrames().addAll(rotateToSide(toSide));
+        sideAnimations[animation].getKeyFrames().addAll(
+                rotateToSide(toSide, spinTime),
+                rotateToSide(toSide, timeOutTime),
+                resetTimeOut(resetTime));
     }
 
-    private KeyFrame rotateToSide(int toSide) {
-        Duration duration = Duration.seconds(3);
+    private KeyFrame rotateToSide(int toSide, int seconds) {
+        Duration duration = Duration.seconds(seconds);
         return new KeyFrame(duration,
                 new KeyValue(ry.angleProperty(), sideAnglesY[toSide]),
                 new KeyValue(rx.angleProperty(), sideAnglesX[toSide])
         );
     }
 
+    private KeyFrame resetTimeOut(int seconds) {
+        return new KeyFrame(Duration.seconds(seconds), event -> sideIndex = 0,
+                new KeyValue(rx.angleProperty(), 0),
+                new KeyValue(ry.angleProperty(), 270));
+
+    }
+
     private void nextSide(MouseEvent event) {
+        sideAnimations[sideIndex].stop();
         sideIndex = (sideIndex + 1) % sideAnimations.length;
         sideAnimations[sideIndex].play();
     }
