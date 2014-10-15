@@ -12,6 +12,14 @@
         <project.build.version>1.8</project.build.version>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>se.crisp.code-examples.javafx</groupId>
+            <artifactId>util</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>
