@@ -1,8 +1,7 @@
 package se.crisp.examples.mockito;
 
+import java.time.OffsetDateTime;
 import java.util.List;
-
-import static java.util.Collections.emptyList;
 
 public class CourseList {
 
@@ -14,6 +13,6 @@ public class CourseList {
 
 
     public List<Course> currentCourses() {
-        return emptyList();
+        return courseService.findCoursesBetweenDates(OffsetDateTime.now(), OffsetDateTime.now());
     }
 }
