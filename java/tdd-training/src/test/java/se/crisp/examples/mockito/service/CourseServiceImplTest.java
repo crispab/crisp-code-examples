@@ -9,7 +9,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.sql.ResultSet;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.contains;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -43,6 +46,21 @@ public class CourseServiceImplTest {
 
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
         verify(courseDatabase).executeSQL(captor.capture());
-        System.out.println(captor.getAllValues());
+
+        // Let's see what we get
+        //assertThat(captor.getValue(), is("SQL"));
+    }
+
+    @Test
+    public void when_between_dates_then_query_contains_dates_given() throws Exception {
+        CourseServiceImpl courseService = new CourseServiceImpl(courseDatabase);
+
+        //courseService.findCoursesBetweenDates(dateFrom, dateTo);
+
+        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+       //verify(courseDatabase).executeSQL(captor.capture());
+
+        //assertThat(captor.getValue(), contains(dateFrom.toString()));
+        //assertThat(captor.getValue(), contains(dateTo.toString()));
     }
 }
