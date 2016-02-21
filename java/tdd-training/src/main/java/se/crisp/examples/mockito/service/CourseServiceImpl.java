@@ -5,7 +5,7 @@ import se.crisp.examples.mockito.CourseService;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Course> findCoursesBetweenDates(OffsetDateTime from, OffsetDateTime tom) {
+    public List<Course> findCoursesBetweenDates(LocalDateTime from, LocalDateTime tom) {
         return null;
     }
 

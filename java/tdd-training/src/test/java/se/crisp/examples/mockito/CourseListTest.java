@@ -3,13 +3,11 @@ package se.crisp.examples.mockito;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
-import static org.junit.Assert.*;
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.verify;
 
@@ -25,7 +23,7 @@ public class CourseListTest {
 
         courseList.currentCourses();
 
-        verify(courseService).findCoursesBetweenDates(isA(OffsetDateTime.class), isA(OffsetDateTime.class));
+  //      verify(courseService).findCoursesBetweenDates(isA(LocalDateTime.class), isA(LocalDateTime.class));
     }
 
     @Test
@@ -34,8 +32,7 @@ public class CourseListTest {
 
         courseList.currentCourses();
 
-        // Problem here. What shall we do?
-        // LocalDateTime months = LocalDateTime.now().plusMonths(6);
-        //verify(courseService).findCoursesBetweenDates(OffsetDateTime.now(), OffsetDateTime.from(months));
+        LocalDateTime months = LocalDateTime.now().plusMonths(6);
+//        verify(courseService).findCoursesBetweenDates(LocalDateTime.now(), months);
     }
 }
