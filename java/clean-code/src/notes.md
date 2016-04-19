@@ -25,3 +25,7 @@ are strings. Keys may have default values.
 When analysing the code, there are 9 warnings. We'll see to them later when we are fully test covered.
 
 Let's start with some easy testing of default values.
+
+Ok and with a test of the "propertyName" and stringProperty functions, we have a line coverage of 9% 30/315.
+Discovered lack of branch coverage. The getProperty with default was not tested for the case when there was
+no fallback necessary!
