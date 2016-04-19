@@ -22,4 +22,6 @@ Let's get the thing under test first, shall we?
 In sweeping terms, the Properties class loads and stores key-value pairs in text- or XML-files. Keys and values
 are strings. Keys may have default values.
 
-When checing
+When analysing the code, there are 9 warnings. We'll see to them later when we are fully test covered.
+
+Let's start with some easy testing of default values.
