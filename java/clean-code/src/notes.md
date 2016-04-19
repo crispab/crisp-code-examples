@@ -41,3 +41,5 @@ it and the load method itself as well!
 
 Added some multi-line testing and we have reached 48% 152/315 line coverage. Adding comment testing gives 50% 159/315!
 
+Adding empty keys that has value "" does not extend the line coverage. That was a bit surprising but possible.
+

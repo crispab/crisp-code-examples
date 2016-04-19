@@ -25,6 +25,7 @@ public class PropertiesTest {
     private static final int BUFFER_SIZE = 25000;
     public static final String LISTING_PROPERTIES = "-- listing properties --";
     private static final String SOME_LONG_VALUE = "012345678901234567890123456789012345678901234567890123456789";
+    public static final String EMPTY_STRING = "";
 
     @Test
     public void initially_empty() throws Exception {
@@ -156,6 +157,16 @@ public class PropertiesTest {
 
         assertThat(properties.getProperty(SOME_KEY), is(SOME_VALUE));
         assertThat(properties.getProperty(SOME_KEY_2), is(SOME_DEFAULT));
+    }
+
+    @Test
+    public void load_from_input_stream_with_empty_key() throws Exception {
+        Properties properties = new Properties();
+
+        InputStream inputStream = new ByteArrayInputStream(SOME_KEY.getBytes());
+        properties.load(inputStream);
+
+        assertThat(properties.getProperty(SOME_KEY), is(EMPTY_STRING));
     }
 
     @Test
