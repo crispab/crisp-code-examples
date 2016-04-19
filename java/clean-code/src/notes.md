@@ -39,3 +39,5 @@ is found here: https://docs.oracle.com/cd/E23095_01/Platform.93/ATGProgGuide/htm
 Getting full coverage with leading space seems not possible since the inner class used to read lines is removing
 it and the load method itself as well! 
 
+Added some multi-line testing and we have reached 48% 152/315 line coverage. Adding comment testing gives 50% 159/315!
+

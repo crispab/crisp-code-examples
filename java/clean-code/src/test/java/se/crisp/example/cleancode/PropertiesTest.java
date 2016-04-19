@@ -9,6 +9,7 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
 
+import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
@@ -146,7 +147,7 @@ public class PropertiesTest {
     public void load_from_input_stream_with_equals() throws Exception {
         Properties properties = new Properties();
 
-        String someKeyValue = String.format("%s=%s%n%s=%s",
+        String someKeyValue = format("%s=%s%n%s=%s",
                 SOME_KEY, SOME_VALUE,
                 SOME_KEY_2, SOME_DEFAULT);
         byte[] bytes = someKeyValue.getBytes();
@@ -161,7 +162,7 @@ public class PropertiesTest {
     public void load_from_input_stream_with_colon() throws Exception {
         Properties properties = new Properties();
 
-        String someKeyValue = String.format("%s:%s%n%s:%s",
+        String someKeyValue = format("%s:%s%n%s:%s",
                 SOME_KEY, SOME_VALUE,
                 SOME_KEY_2, SOME_DEFAULT);
         byte[] bytes = someKeyValue.getBytes();
@@ -176,7 +177,7 @@ public class PropertiesTest {
     public void load_from_input_stream_with_back_slash() throws Exception {
         Properties properties = new Properties();
 
-        String someKeyValue = String.format("HI\\:%s:%s%n%s:%s",
+        String someKeyValue = format("HI\\:%s:%s%n%s:%s",
                 SOME_KEY, SOME_VALUE,
                 SOME_KEY_2, SOME_DEFAULT);
         byte[] bytes = someKeyValue.getBytes();
@@ -191,7 +192,7 @@ public class PropertiesTest {
     public void load_from_input_stream_with_leading_white_space() throws Exception {
         Properties properties = new Properties();
 
-        String someKeyValue = String.format(" %s:%s%n\t%s:%s%n \f%s = %s",
+        String someKeyValue = format(" %s:%s%n\t%s:%s%n \f%s = %s",
                 SOME_KEY, SOME_VALUE,
                 SOME_KEY_2, SOME_DEFAULT,
                 SOME_KEY_3, SOME_LONG_VALUE);
@@ -215,5 +216,35 @@ public class PropertiesTest {
         properties.load(inputStream);
 
         assertThat(properties.getProperty("some key"), is(SOME_VALUE));
+    }
+
+    @Test
+    public void load_from_input_stream_with_comment() throws Exception {
+        Properties properties = new Properties();
+
+        String someKeyValue = format("#%s:%s%n%s:%s",
+                SOME_KEY, SOME_VALUE,
+                SOME_KEY_2, SOME_DEFAULT);
+        byte[] bytes = someKeyValue.getBytes();
+        InputStream inputStream = new ByteArrayInputStream(bytes);
+        properties.load(inputStream);
+
+        assertThat(properties.getProperty(SOME_KEY), is(nullValue()));
+        assertThat(properties.getProperty(SOME_KEY_2), is(SOME_DEFAULT));
+    }
+
+    @Test
+    public void load_from_input_stream_with_multi_line_value() throws Exception {
+        Properties properties = new Properties();
+
+        String someKeyValue = format("%s:\\%n%s,\\%n%s,\\%n\\%s",
+                SOME_KEY, SOME_VALUE,
+                SOME_DEFAULT,
+                SOME_LONG_VALUE);
+        byte[] bytes = someKeyValue.getBytes();
+        InputStream inputStream = new ByteArrayInputStream(bytes);
+        properties.load(inputStream);
+
+        assertThat(properties.getProperty(SOME_KEY), is(format("%s,%s,%s", SOME_VALUE, SOME_DEFAULT, SOME_LONG_VALUE)));
     }
 }
