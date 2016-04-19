@@ -31,14 +31,18 @@ public class PropertiesTest {
     public void properties_with_no_value_returns_null() throws Exception {
         Properties properties = new Properties();
 
-        assertThat(properties.getProperty(SOME_KEY), is(nullValue()));
+        String actual = properties.getProperty(SOME_KEY);
+
+        assertThat(actual, is(nullValue()));
     }
 
     @Test
     public void get_property_with_default_value_fall_back() throws Exception {
         Properties properties = new Properties();
 
-        assertThat(properties.getProperty(SOME_KEY, SOME_DEFAULT), is(SOME_DEFAULT));
+        String actual = properties.getProperty(SOME_KEY, SOME_DEFAULT);
+
+        assertThat(actual, is(SOME_DEFAULT));
     }
 
     @Test
@@ -46,7 +50,9 @@ public class PropertiesTest {
         Properties properties = new Properties();
         properties.setProperty(SOME_KEY, SOME_VALUE);
 
-        assertThat(properties.getProperty(SOME_KEY, SOME_DEFAULT), is(SOME_VALUE));
+        String actual = properties.getProperty(SOME_KEY, SOME_DEFAULT);
+
+        assertThat(actual, is(SOME_VALUE));
     }
 
     @Test
