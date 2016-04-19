@@ -29,3 +29,6 @@ Let's start with some easy testing of default values.
 Ok and with a test of the "propertyName" and stringProperty functions, we have a line coverage of 9% 30/315.
 Discovered lack of branch coverage. The getProperty with default was not tested for the case when there was
 no fallback necessary!
+
+Next up for testing is the list methods. There is a secret shortening of strings so we need a long value for testing.
+The list methods are a duplications of each other so the tests are quite similar too. Coverage now 15% 50/315.

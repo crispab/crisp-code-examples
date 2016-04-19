@@ -3,6 +3,9 @@ package se.crisp.example.cleancode;
 
 import org.junit.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -10,14 +13,18 @@ import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class PropertiesTest {
 
     public static final String SOME_KEY = "some key";
+    public static final String SOME_KEY_2 = "some key 2";
     public static final String SOME_VALUE = "some value";
     public static final String SOME_DEFAULT = "some default";
     private static final String SOME_DEFAULT_KEY = "some default key";
+    private static final int BUFFER_SIZE = 25000;
+    public static final String LISTING_PROPERTIES = "-- listing properties --";
+    private static final String SOME_LONG_VALUE = "012345678901234567890123456789012345678901234567890123456789";
 
     @Test
     public void initially_empty() throws Exception {
@@ -98,5 +105,41 @@ public class PropertiesTest {
         }};
 
         assertThat(actualSet, is(expectedSet));
+    }
+
+    @Test
+    public void list_properties_on_print_stream() throws Exception {
+        Properties properties = new Properties();
+        properties.setProperty(SOME_KEY, SOME_VALUE);
+        properties.setProperty(SOME_KEY_2, SOME_LONG_VALUE);
+
+        ByteArrayOutputStream sink = new ByteArrayOutputStream(BUFFER_SIZE);
+        properties.list(new PrintStream(sink));
+
+        ByteArrayOutputStream expected = new ByteArrayOutputStream(BUFFER_SIZE);
+        PrintStream stream = new PrintStream(expected);
+        stream.println(LISTING_PROPERTIES);
+        stream.println(SOME_KEY + "=" + SOME_VALUE);
+        stream.println(SOME_KEY_2 + "=" + SOME_LONG_VALUE.substring(0, 37) + "...");
+
+        assertThat(sink.toString(), is(expected.toString()));
+    }
+
+    @Test
+    public void list_properties_on_print_writer() throws Exception {
+        Properties properties = new Properties();
+        properties.setProperty(SOME_KEY, SOME_VALUE);
+        properties.setProperty(SOME_KEY_2, SOME_LONG_VALUE);
+
+        ByteArrayOutputStream sink = new ByteArrayOutputStream(BUFFER_SIZE);
+        properties.list(new PrintWriter(sink));
+
+        ByteArrayOutputStream expected = new ByteArrayOutputStream(BUFFER_SIZE);
+        PrintWriter writer = new PrintWriter(expected);
+        writer.println(LISTING_PROPERTIES);
+        writer.println(SOME_KEY + "=" + SOME_VALUE);
+        writer.println(SOME_KEY_2 + "=" + SOME_LONG_VALUE.substring(0, 37) + "...");
+
+        assertThat(sink.toString(), is(expected.toString()));
     }
 }
