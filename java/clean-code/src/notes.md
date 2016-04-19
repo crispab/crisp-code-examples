@@ -32,3 +32,10 @@ no fallback necessary!
 
 Next up for testing is the list methods. There is a secret shortening of strings so we need a long value for testing.
 The list methods are a duplications of each other so the tests are quite similar too. Coverage now 15% 50/315.
+
+Ok, some serious business is the load functions with their support for unicode characters. The properties file format 
+is found here: https://docs.oracle.com/cd/E23095_01/Platform.93/ATGProgGuide/html/s0204propertiesfileformat01.html
+
+Getting full coverage with leading space seems not possible since the inner class used to read lines is removing
+it and the load method itself as well! 
+

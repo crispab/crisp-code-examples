@@ -3,9 +3,7 @@ package se.crisp.example.cleancode;
 
 import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -17,8 +15,9 @@ import static org.junit.Assert.assertThat;
 
 public class PropertiesTest {
 
-    public static final String SOME_KEY = "some key";
-    public static final String SOME_KEY_2 = "some key 2";
+    public static final String SOME_KEY = "somekey";
+    public static final String SOME_KEY_2 = "somekey2";
+    public static final String SOME_KEY_3 = "somekey3";
     public static final String SOME_VALUE = "some value";
     public static final String SOME_DEFAULT = "some default";
     private static final String SOME_DEFAULT_KEY = "some default key";
@@ -141,5 +140,80 @@ public class PropertiesTest {
         writer.println(SOME_KEY_2 + "=" + SOME_LONG_VALUE.substring(0, 37) + "...");
 
         assertThat(sink.toString(), is(expected.toString()));
+    }
+
+    @Test
+    public void load_from_input_stream_with_equals() throws Exception {
+        Properties properties = new Properties();
+
+        String someKeyValue = String.format("%s=%s%n%s=%s",
+                SOME_KEY, SOME_VALUE,
+                SOME_KEY_2, SOME_DEFAULT);
+        byte[] bytes = someKeyValue.getBytes();
+        InputStream inputStream = new ByteArrayInputStream(bytes);
+        properties.load(inputStream);
+
+        assertThat(properties.getProperty(SOME_KEY), is(SOME_VALUE));
+        assertThat(properties.getProperty(SOME_KEY_2), is(SOME_DEFAULT));
+    }
+
+    @Test
+    public void load_from_input_stream_with_colon() throws Exception {
+        Properties properties = new Properties();
+
+        String someKeyValue = String.format("%s:%s%n%s:%s",
+                SOME_KEY, SOME_VALUE,
+                SOME_KEY_2, SOME_DEFAULT);
+        byte[] bytes = someKeyValue.getBytes();
+        InputStream inputStream = new ByteArrayInputStream(bytes);
+        properties.load(inputStream);
+
+        assertThat(properties.getProperty(SOME_KEY), is(SOME_VALUE));
+        assertThat(properties.getProperty(SOME_KEY_2), is(SOME_DEFAULT));
+    }
+
+    @Test
+    public void load_from_input_stream_with_back_slash() throws Exception {
+        Properties properties = new Properties();
+
+        String someKeyValue = String.format("HI\\:%s:%s%n%s:%s",
+                SOME_KEY, SOME_VALUE,
+                SOME_KEY_2, SOME_DEFAULT);
+        byte[] bytes = someKeyValue.getBytes();
+        InputStream inputStream = new ByteArrayInputStream(bytes);
+        properties.load(inputStream);
+
+        assertThat(properties.getProperty("HI:" + SOME_KEY), is(SOME_VALUE));
+        assertThat(properties.getProperty(SOME_KEY_2), is(SOME_DEFAULT));
+    }
+
+    @Test
+    public void load_from_input_stream_with_leading_white_space() throws Exception {
+        Properties properties = new Properties();
+
+        String someKeyValue = String.format(" %s:%s%n\t%s:%s%n \f%s = %s",
+                SOME_KEY, SOME_VALUE,
+                SOME_KEY_2, SOME_DEFAULT,
+                SOME_KEY_3, SOME_LONG_VALUE);
+        byte[] bytes = someKeyValue.getBytes();
+        InputStream inputStream = new ByteArrayInputStream(bytes);
+        properties.load(inputStream);
+
+        assertThat(properties.getProperty(SOME_KEY), is(SOME_VALUE));
+        assertThat(properties.getProperty(SOME_KEY_2), is(SOME_DEFAULT));
+        assertThat(properties.getProperty(SOME_KEY_3), is(SOME_LONG_VALUE));
+    }
+
+    @Test
+    public void load_from_input_stream_with_embedded_white_space() throws Exception {
+        Properties properties = new Properties();
+
+        String someKeyWithSpace = "some\\ key";
+        String someKeyValue = someKeyWithSpace + "=" + SOME_VALUE;
+        byte[] bytes = someKeyValue.getBytes();
+        InputStream inputStream = new ByteArrayInputStream(bytes);
+        properties.load(inputStream);
+
+        assertThat(properties.getProperty("some key"), is(SOME_VALUE));
     }
 }
