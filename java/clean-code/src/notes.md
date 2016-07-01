@@ -43,3 +43,13 @@ Added some multi-line testing and we have reached 48% 152/315 line coverage. Add
 
 Adding empty keys that has value "" does not extend the line coverage. That was a bit surprising but possible.
 
+Ok, so this has been dormant for a while.
+
+The first reflection is that some of the tests does not do what they say in their names. Should be easy to fix.
+Secondly, the inner class LineReader is weird. It can be constructed from a Reader or an InputStream. The logic
+is similar for both cases but there are some conditionals whether it has been constructed from either.
+
+Still, lots of coverage missing, especially when it comes to store function. But also around escape strings for
+Unicode.
+
+Added a store test and got 64% (207/322) coverage.
