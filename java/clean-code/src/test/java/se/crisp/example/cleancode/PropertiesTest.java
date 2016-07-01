@@ -240,14 +240,11 @@ public class PropertiesTest {
         Properties properties = propertiesWithTwoProperties();
 
         ByteArrayOutputStream sink = new ByteArrayOutputStream(BUFFER_SIZE);
-        properties.list(new PrintWriter(sink));
+        PrintWriter writer = new PrintWriter(sink);
+        properties.list(writer);
+        writer.flush();
 
-        ByteArrayOutputStream expected = new ByteArrayOutputStream(BUFFER_SIZE);
-        PrintWriter writer = new PrintWriter(expected);
-        writer.println(LISTING_PROPERTIES);
-        writer.println(SOME_KEY + "=" + SOME_VALUE);
-        writer.println(SOME_KEY_2 + "=" + SOME_LONG_VALUE.substring(0, 37) + "...");
-
+        ByteArrayOutputStream expected = getExpectedTwoProperties(true, LISTING_PROPERTIES);
         assertThat(sink.toString(), is(expected.toString()));
     }
 

@@ -53,3 +53,6 @@ Still, lots of coverage missing, especially when it comes to store function. But
 Unicode.
 
 Added a store test and got 64% (207/322) coverage.
+
+Fiddling with the tests, discovered a typical problem for these kind of scenarios. The test passed bu was wrong
+as it compared two empty strings.
