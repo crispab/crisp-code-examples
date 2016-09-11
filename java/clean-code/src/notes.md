@@ -52,7 +52,11 @@ is similar for both cases but there are some conditionals whether it has been co
 Still, lots of coverage missing, especially when it comes to store function. But also around escape strings for
 Unicode.
 
-Added a store test and got 64% (207/322) coverage.
+Added a store test and got 64% (207/322) coverage. Wonder why it has become more lines?
 
 Fiddling with the tests, discovered a typical problem for these kind of scenarios. The test passed bu was wrong
 as it compared two empty strings.
+
+Followed the logic and lot of filtering of blanks, joining lines, etc, is done in the inner class LineReader. 
+It has one method, readLine, that returns an integer. The outer class then access its internal buffer to parse
+the line.
