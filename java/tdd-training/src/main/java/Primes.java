@@ -1,8 +1,9 @@
+import java.util.Arrays;
+import java.util.List;
 
 public class Primes {
-
-
-    public static int[] of(int i) {
-        return new int[]{1};
+    
+    public static List<Integer> of(int i) {
+        return Arrays.asList(1);
     }
 }
