@@ -22,7 +22,7 @@
         </license>
     </licenses>
     <properties>
-        <wicket.version>6.3.0</wicket.version>
+        <wicket.version>7.17.0</wicket.version>
         <junit.version>4.10</junit.version>
         <jetty.version>7.6.3.v20120416</jetty.version>
         <slf4j.version>1.6.4</slf4j.version>
